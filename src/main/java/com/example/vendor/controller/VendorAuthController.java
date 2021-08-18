@@ -12,10 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -26,6 +29,9 @@ public class VendorAuthController {
 
     @Autowired
     private VendorAuthService vendorAuthService;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @PostMapping("login")
     public ResponseModel customerLogin(@RequestBody LoginModel loginModel) {
@@ -57,7 +63,20 @@ public class VendorAuthController {
             logger.error("Exception {}", e.getMessage());
             return new CommanUtil().create(Message.SOMTHING_WRONG, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @GetMapping("mail")
+    public ResponseModel mail() {
+        try {
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo("7043027540a@gmail.com");
+            mail.setSubject("test");
+            mail.setText("test");
+            javaMailSender.send(mail);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
