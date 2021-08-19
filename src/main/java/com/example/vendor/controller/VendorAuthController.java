@@ -100,11 +100,10 @@ public class VendorAuthController {
         return vendorService.verifyVendor(model);
     }
 
-//    On Feed Display Own Product List
+    //    On Feed Display Own Product List
     @PostMapping("feed")
     public PageResponseModel feed(@RequestBody PageDetailModel model) {
         return vendorService.myProdustList(model);
     }
-
 }
 
