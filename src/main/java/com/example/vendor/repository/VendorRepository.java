@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VendorRepository extends CrudRepository<Vendor, String> {
-    @Query("SELECT v FROM Vendor v WHERE v.emailid = :email AND v.status = 0")
+    @Query("SELECT v FROM Vendor v WHERE v.emailid = :email AND v.status = 1")
     Vendor findByEmailid(String email);
 
     int countByEmailid(String email);

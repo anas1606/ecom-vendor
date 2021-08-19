@@ -1,7 +1,5 @@
 package com.example.vendor.service;
 
-
-import com.example.commanentity.Customer;
 import com.example.commanentity.Vendor;
 import com.example.vendor.repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
