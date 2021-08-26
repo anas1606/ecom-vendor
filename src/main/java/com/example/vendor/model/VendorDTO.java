@@ -1,6 +1,6 @@
 package com.example.vendor.model;
 
-import com.example.commanentity.Company_Address;
+import com.example.commanentity.CompanyAddress;
 import lombok.Data;
 
 @Data
@@ -15,9 +15,9 @@ public class VendorDTO {
     private String address2;
     private String country;
     private String state;
-    private int pincode;
+    private String pincode;
 
-    public VendorDTO(Company_Address ca) {
+    public VendorDTO(CompanyAddress ca) {
         this.firstName = ca.getVendor().getFirst_name();
         this.lastName = ca.getVendor().getLast_name();
         this.emailid = ca.getVendor().getEmailid();

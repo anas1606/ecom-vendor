@@ -76,7 +76,7 @@ public class VendorServiceImp implements VendorService {
             vendorRepository.save(vendor);
 
             responseModel = commanUtil.create(Message.LOGIN_SUCCESS,
-                    vendor.getSession_token(),
+                    vendor,
                     HttpStatus.OK);
 
         } catch (BadCredentialsException ex) {
@@ -117,7 +117,7 @@ public class VendorServiceImp implements VendorService {
                 insertAddress(vendor, model);
                 commanUtil.sendVerificationEmail(vendor.getEmailid(), vendor.getEmail_verification_otp());
 
-                return commanUtil.create(Message.CUSTOMER_REGISTER, null, HttpStatus.OK);
+                return commanUtil.create(Message.CUSTOMER_REGISTER, vendor.getId() , HttpStatus.OK);
 
             } catch (Exception e) {
                 logger.error("Error Will Registration");
@@ -160,7 +160,7 @@ public class VendorServiceImp implements VendorService {
                 if (file != null)
                     str = new FileUpload().saveFile(folder, file, vendor.getId());
                 vendor.setProfile_url(str);
-
+                vendorRepository.save(vendor);
                 return commanUtil.create(Message.PROFILE_UPLODED, null, HttpStatus.OK);
 
             } catch (Exception e) {
@@ -178,7 +178,7 @@ public class VendorServiceImp implements VendorService {
     public ResponseModel viewProfile() {
         Vendor vendor = vendorRepository.findByEmailid(commanUtil.getCurrentUserEmail());
         if (vendor != null) {
-            Company_Address companyAddress = comapanyAddressRepository.findByVendor_Id(vendor.getId());
+            CompanyAddress companyAddress = comapanyAddressRepository.findByVendor_Id(vendor.getId());
             VendorDTO dto = new VendorDTO(companyAddress);
 
             return commanUtil.create(Message.SUCCESS, dto, HttpStatus.OK);
@@ -237,11 +237,12 @@ public class VendorServiceImp implements VendorService {
             if (vendor != null) {
                 model = commanUtil.fillValueToPageModel(model);
                 Pageable page = commanUtil.getPageDetail(model);
+                String search = "%" + model.getSearch() + "%";
                 Page<HomeFeedDTO> dto;
                 if (commanUtil.checkNull(model.getCategory()))
-                    dto = productRepository.findAllPagable(vendor.getId(), page);
+                    dto = productRepository.findAllPagable(search , vendor.getId(), page);
                 else
-                    dto = productRepository.findAllByCategoryPagable(vendor.getId(), model.getCategory(), page);
+                    dto = productRepository.findAllByCategoryPagable(search , vendor.getId(), model.getCategory(), page);
 
                 return commanUtil.create(Message.SUCCESS, dto.getContent(), commanUtil.pagersultModel(dto), HttpStatus.OK);
             } else {
@@ -258,7 +259,7 @@ public class VendorServiceImp implements VendorService {
     private void insertAddress(Vendor vendor, VendorRegisterModel model) {
 
 //            Get CustomerAddress object From DTO
-        Company_Address companyAddress = model.getCompanyAddressFromModel();
+        CompanyAddress companyAddress = model.getCompanyAddressFromModel();
         companyAddress.setVendor(vendor);
 //        insert Country And State
         addCountryAndState(companyAddress, model.getCountry(), model.getState());
@@ -267,14 +268,14 @@ public class VendorServiceImp implements VendorService {
     private void UpdateAddress(Vendor vendor, VendorUpdateModel model) {
         logger.info("Updating Address");
 //        Get CustomerAddress object From DTO
-        Company_Address companyAddress = comapanyAddressRepository.findByVendor_Id(vendor.getId());
+        CompanyAddress companyAddress = comapanyAddressRepository.findByVendor_Id(vendor.getId());
         companyAddress = model.getUpdatedCompanyAddressFromModel(companyAddress);
         companyAddress.setVendor(vendor);
 //        insert Country And State
         addCountryAndState(companyAddress, model.getCountry(), model.getState());
     }
 
-    private void addCountryAndState(Company_Address companyAddress, String countryName, String stateName) {
+    private void addCountryAndState(CompanyAddress companyAddress, String countryName, String stateName) {
 //        Fill the Country and State
         Country country = countryRepository.findByName(countryName);
         if (country != null)

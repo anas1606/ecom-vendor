@@ -1,6 +1,6 @@
 package com.example.vendor.model;
 
-import com.example.commanentity.Company_Address;
+import com.example.commanentity.CompanyAddress;
 import com.example.commanentity.Vendor;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class VendorUpdateModel {
     private String address2;
     private String country;
     private String state;
-    private int pincode;
+    private String pincode;
 
     public Vendor getUpdatedvendorFromModel(Vendor v) {
         v.setFirst_name(firstName);
@@ -24,7 +24,7 @@ public class VendorUpdateModel {
         return v;
     }
 
-    public Company_Address getUpdatedCompanyAddressFromModel(Company_Address c) {
+    public CompanyAddress getUpdatedCompanyAddressFromModel(CompanyAddress c) {
         c.setAddress1(address1);
         c.setAddress2(address2);
         c.setPincode(pincode);

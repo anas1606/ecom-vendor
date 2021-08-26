@@ -1,7 +1,7 @@
 package com.example.vendor.model;
 
 
-import com.example.commanentity.Company_Address;
+import com.example.commanentity.CompanyAddress;
 import com.example.commanentity.Vendor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +18,7 @@ public class VendorRegisterModel {
     private String address2;
     private String country;
     private String state;
-    private int pincode;
+    private String pincode;
     private MultipartFile profileURL;
 
     public Vendor getVendorFromModel() {
@@ -32,8 +32,8 @@ public class VendorRegisterModel {
         return v;
     }
 
-    public Company_Address getCompanyAddressFromModel() {
-        Company_Address ca = new Company_Address();
+    public CompanyAddress getCompanyAddressFromModel() {
+        CompanyAddress ca = new CompanyAddress();
         ca.setAddress1(address1);
         ca.setAddress2(address2);
         ca.setPincode(pincode);
